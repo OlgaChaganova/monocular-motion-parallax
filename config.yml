@@ -1,0 +1,16 @@
+cylinders:
+    cylinder_1:
+        rho: 10
+        z: [-5, 5]
+        points_cnt: 60
+        color: 'goldenrod'
+
+    cylinder_2:
+        rho: 3
+        z: [ -5, 5 ]
+        points_cnt: 60
+        color: 'red'
+
+animation:
+    fps: 60
+    save_path: '../parallax_60fps.gif'
