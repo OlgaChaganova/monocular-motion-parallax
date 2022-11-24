@@ -4,13 +4,26 @@ import numpy as np
 
 
 class Cylinder(object):
+    """Cylinder class."""
+
     def __init__(self, rho: int | float, z: tp.Tuple[int, int] | tp.Tuple[float, float]):
+        """
+        Initialize Cylinder.
+
+        Parameters
+        ----------
+        rho : int | float
+            Radius.
+
+        z : tp.Tuple[int, int] | tp.Tuple[float, float]
+            Tuple with (z_min, z_max) coordinates.
+        """
         assert z[0] < z[1], 'Min z-coordinate must be lower than max z-coordinate'
         self._rho = rho
         self._z = z
         self.points = np.array([])
 
-    def generate_points(self, points_cnt: int) -> None:
+    def generate_points(self, points_cnt: int):
         """
         Generate random points.
 
@@ -51,7 +64,18 @@ class Cylinder(object):
         self,
         direction: tp.Literal['clockwise', 'counterclockwise'],
         delta_phi: float = 1,
-    ):
+    ) -> None:
+        """
+        Rotate the cylinder.
+
+        Parameters
+        ----------
+        direction : tp.Literal['clockwise', 'counterclockwise']
+            Direction of the rotation.
+
+        delta_phi : float
+            Delta of the phi angle.
+        """
         assert direction in ['clockwise', 'counterclockwise'], \
             'Direction must be one of the following: clockwise, counterclockwise'
         if direction == 'clockwise':
@@ -60,6 +84,14 @@ class Cylinder(object):
             self.points[:, 0] += delta_phi * np.pi / 180
 
     def project_2d(self) -> np.array:
+        """
+        Project 3D points (x, y, z) to 2D (x, y).
+
+        Returns
+        -------
+        np.array
+            Points in 2D-cartesian (x, y) coordinate system. Shape: [points_cnt, 2]
+        """
         points = self.points
         points = self.cylindrical2cartesian(points)
         xs, ys, zs = points[:, 0], points[:, 1], points[:, 2]
