@@ -8,4 +8,4 @@ if __name__ == '__main__':
     start_time = time()
     dynamic_animation.make_animation()
     end_time = time()
-    print(f'Inference time: {end_time - start_time}')
+    print(f'Generation time: {end_time - start_time}')

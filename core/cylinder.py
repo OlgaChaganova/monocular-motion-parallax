@@ -59,7 +59,8 @@ class Cylinder(object):
         else:
             self.points[:, 0] += delta_phi * np.pi / 180
 
-
-if __name__ == '__main__':
-    cylinder = Cylinder(rho=5, z=(-5, 5))
-    print(cylinder.generate_random_points(points_cnt=50).shape)
+    def project_2d(self) -> np.array:
+        points = self.points
+        points = self.cylindrical2cartesian(points)
+        xs, ys, zs = points[:, 0], points[:, 1], points[:, 2]
+        return np.column_stack([xs, zs])

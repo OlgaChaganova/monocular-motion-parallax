@@ -1,16 +1,19 @@
 cylinders:
     cylinder_1:
-        rho: 10
-        z: [-5, 5]
-        points_cnt: 60
-        color: 'goldenrod'
-
-    cylinder_2:
-        rho: 3
-        z: [ -5, 5 ]
+        rho: 20
+        z: [-10, 10]
         points_cnt: 60
         color: 'red'
+        direction: 'counterclockwise' # clockwise / counterclockwise
+
+    cylinder_2:
+        rho: 5
+        z: [-10, 10]
+        points_cnt: 60
+        color: 'orange'
+        direction: 'counterclockwise' # clockwise / counterclockwise
 
 animation:
     fps: 60
-    save_path: '../parallax_60fps.gif'
+    save_path: '../parallax.gif'
+    delta_phi: 1  # можно менять скорость вращения за счет изменения угла поворота за один такт
