@@ -37,9 +37,12 @@ class DynamicAnimation(object):
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.axis('off')
-        frames = self._make_frames(ax, frame_cnt=360)
+        frame_cnt = round(360 // self._config_anim['delta_phi'])
+        frames = self._make_frames(ax, frame_cnt=frame_cnt)
         anim = animation.ArtistAnimation(fig, frames, interval=20, blit=True, repeat=True)
-        anim.save(self._config_anim['save_path'], fps=self._config_anim['fps'], writer='pillow')
+        if self._config_anim['save']:
+            anim.save(self._config_anim['save_path'], fps=self._config_anim['fps'], writer='pillow')
+        plt.show()
 
     @classmethod
     def _get_points(cls, cylinder: Cylinder, config: dict) -> tp.Tuple[np.array, np.array, str]:
@@ -55,7 +58,7 @@ class DynamicAnimation(object):
             self.cylinder2.rotate(direction=self._config_cyl2['direction'], delta_phi=self._config_anim['delta_phi'])
             xx1, yy1, color1 = self._get_points(self.cylinder1, self._config_cyl1)
             xx2, yy2, color2 = self._get_points(self.cylinder2, self._config_cyl2)
-            scene1 = ax.scatter(xx1, yy1, c=color1, alpha=0.7)
-            scene2 = ax.scatter(xx2, yy2, c=color2, alpha=0.7)
+            scene1 = ax.scatter(xx1, yy1, c=color1, alpha=0.7, s=self._config_cyl1['size'], marker=self._config_cyl1['marker'])
+            scene2 = ax.scatter(xx2, yy2, c=color2, alpha=0.7, s=self._config_cyl2['size'], marker=self._config_cyl2['marker'])
             frames.append([scene1, scene2])
         return frames
