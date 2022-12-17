@@ -1,11 +1,20 @@
-from time import time
-
-from animation import DynamicAnimation
+from services.animation import DynamicAnimation
+from services.parallax import Parallax
 
 
 if __name__ == '__main__':
     dynamic_animation = DynamicAnimation()
-    start_time = time()
-    dynamic_animation.make_animation()
-    end_time = time()
-    print(f'Generation time: {end_time - start_time}')
+
+    # 1. make animation
+    frames = dynamic_animation.make_animation()
+
+    # 2. track point
+
+    # 3. estimate angular speed and rotation direction
+    parallax = Parallax(frames)
+
+    angular_speed = parallax.estimate_angular_speed()
+    print(f'Estimated angular speed: {angular_speed}')
+
+    direction = parallax.get_rotation_direction()
+    print(f'Direction of rotation: {direction}')

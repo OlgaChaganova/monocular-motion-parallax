@@ -85,7 +85,7 @@ class Cylinder(object):
 
     def project_2d(self, dist_to_camera: float) -> np.array:
         """
-        Project 3D points (x, y, z) to 2D (x, y).
+        Project 3D points (x, y, z) to perspective 2D (x, y) coordinate system.
 
         Parameters
         ----------

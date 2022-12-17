@@ -2,16 +2,17 @@ import typing as tp
 
 
 class Parallax(object):
-    def __init__(self):
+    def __init__(self, frames: list):
+        self._frames = frames
+
+    def get_rotation_direction(self) -> tp.Literal['clockwise', 'counterclockwise']:
+        frames = self._frames
+        return 'clockwise'
+
+    def estimate_angular_speed(self) -> float:
         ...
 
-    def get_rotation_direction(self, frames: list):
-        ...
-
-    def eval_angular_speed(self, frames: list):
-        ...
-
-    def track_point(self, frames: list):
+    def track_point(self):
         ...
 
 
