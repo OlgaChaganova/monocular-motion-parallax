@@ -14,7 +14,7 @@ from .projection import linear_projection
 class DynamicAnimation(object):
     """Animation class."""
 
-    def __init__(self, config_path: str = '../config.yml'):
+    def __init__(self, config_path: str = '../configs/config.yml'):
         """
         Initialize DynamicAnimation class.
 
@@ -35,7 +35,7 @@ class DynamicAnimation(object):
         self.cylinder2 = Cylinder(rho=self._config_cyl2['rho'], z=self._config_cyl2['z'])
         self.cylinder2.generate_points(points_cnt=self._config_cyl2['points_cnt'])
 
-    def make_animation(self) -> list:
+    def make_animation(self) -> tp.List[np.array]:
         """Make animation with cylinders."""
         start_time = time()
         fig = plt.figure(figsize=(5, 5))
@@ -43,13 +43,14 @@ class DynamicAnimation(object):
         ax = fig.add_subplot(111)
         ax.axis('off')
         frame_cnt = round(360 // self._config_anim['delta_phi'])
-        frames = self._make_frames(ax, frame_cnt=frame_cnt)
+        frames, raw_images = self._make_frames(ax, frame_cnt=frame_cnt)
         anim = animation.ArtistAnimation(fig, frames, interval=20, blit=True, repeat=True)
         print(f'Total generation time: {round(time() - start_time, 3)} s')
         if self._config_anim['save']:
             anim.save(self._config_anim['save_path'], fps=self._config_anim['fps'], writer='pillow')
-        plt.show()
-        return frames
+        if self._config_anim['show']:
+            plt.show()
+        return raw_images
 
     def _get_points(self, cylinder1: Cylinder, cylinder2: Cylinder) -> tp.Tuple[np.array, np.array, np.array, np.array]:
         """Get points in correct format for 2d projection. One point is one pixel on the image."""
@@ -84,15 +85,18 @@ class DynamicAnimation(object):
             image[y, x] = 1  # central pixel of the point
         return image
 
-    def _make_frames(self, ax, frame_cnt: int) -> list:
+    def _make_frames(self, ax, frame_cnt: int) -> tp.Tuple[list, tp.List[np.array]]:
         """Make frames for animation."""
         frames = []
+        raw_images = []
         for _ in tqdm(range(frame_cnt)):
             self.cylinder1.rotate(direction=self._config_cyl1['direction'], delta_phi=self._config_anim['delta_phi'])
             self.cylinder2.rotate(direction=self._config_cyl2['direction'], delta_phi=self._config_anim['delta_phi'])
             xx1, yy1, xx2, yy2 = self._get_points(self.cylinder1, self.cylinder2)
             image1 = self._draw_points(xx1, yy1, self._config_cyl1['point_size'])
             image2 = self._draw_points(xx2, yy2, self._config_cyl2['point_size'])
-            scene1 = ax.imshow(image1 + image2)  # adding image of 1st cylinder with image of the 2nd cylinder
+            image = image1 + image2
+            raw_images.append(image)
+            scene1 = ax.imshow(image)  # adding image of 1st cylinder with image of the 2nd cylinder
             frames.append([scene1])
-        return frames
+        return frames, raw_images

@@ -6,12 +6,12 @@ if __name__ == '__main__':
     dynamic_animation = DynamicAnimation()
 
     # 1. make animation
-    frames = dynamic_animation.make_animation()
+    raw_images = dynamic_animation.make_animation()
 
     # 2. track point
 
     # 3. estimate angular speed and rotation direction
-    parallax = Parallax(frames)
+    parallax = Parallax(frames=raw_images)
 
     angular_speed = parallax.estimate_angular_speed()
     print(f'Estimated angular speed: {angular_speed}')
