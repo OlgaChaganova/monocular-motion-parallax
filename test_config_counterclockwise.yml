@@ -1,0 +1,25 @@
+cylinders:
+    cylinder_1:
+        rho: 0.1
+        z: [-10, 10]
+        points_cnt: 60
+        point_size: 5 # pixels
+        direction: 'clockwise' # clockwise / counterclockwise
+
+    cylinder_2:
+        rho: 0.1
+        z: [-10, 10]
+        points_cnt: 0
+        point_size: 5 # pixels
+        direction: 'clockwise' # clockwise / counterclockwise
+
+camera:
+    distance: 3
+
+animation:
+    fps: 60
+    image_shape: [360, 360]  # height, width
+    frame_width: 60  # in pixels
+    save_path: '../cylinder.gif'
+    delta_phi: 1 # можно менять скорость вращения за счет изменения угла поворота за один такт
+    save: False
