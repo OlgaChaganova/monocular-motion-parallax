@@ -1,5 +1,4 @@
 import typing as tp
-from time import time
 
 import numpy as np
 from omegaconf import OmegaConf
@@ -25,6 +24,7 @@ class DynamicAnimation(object):
         self._config_cyl1 = self._config['cylinders']['cylinder_1']
         self._config_cyl2 = self._config['cylinders']['cylinder_2']
         self._config_anim = self._config['animation']
+        self._config_cam = self._config['camera']
 
         self.cylinder1 = Cylinder(rho=self._config_cyl1['rho'], z=self._config_cyl1['z'])
         self.cylinder1.generate_points(points_cnt=self._config_cyl1['points_cnt'])
@@ -36,7 +36,7 @@ class DynamicAnimation(object):
         """Make animation with cylinders."""
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.axis('off')
+        # ax.axis('off')
         frame_cnt = round(360 // self._config_anim['delta_phi'])
         frames = self._make_frames(ax, frame_cnt=frame_cnt)
         anim = animation.ArtistAnimation(fig, frames, interval=20, blit=True, repeat=True)
@@ -44,10 +44,9 @@ class DynamicAnimation(object):
             anim.save(self._config_anim['save_path'], fps=self._config_anim['fps'], writer='pillow')
         plt.show()
 
-    @classmethod
-    def _get_points(cls, cylinder: Cylinder, config: dict) -> tp.Tuple[np.array, np.array, str]:
+    def _get_points(self, cylinder: Cylinder, config: dict) -> tp.Tuple[np.array, np.array, str]:
         """Get points in correct format."""
-        projected_coords = cylinder.project_2d()
+        projected_coords = cylinder.project_2d(self._config_cam['distance'])
         return projected_coords[:, 0], projected_coords[:, 1], config['color']
 
     def _make_frames(self, ax, frame_cnt: int) -> list:

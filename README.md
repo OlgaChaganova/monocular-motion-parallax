@@ -12,4 +12,12 @@ cd core
 python main.py
 ```
 
-![gif](viz/parallax.gif)
+![gif](viz/cylinder.gif)
+
+### Литература:
+
+- Ульман Ш. Принципы восприятия подвижных объектов. 1983 г 
+
+- Шиффман Х.Р. Ощущение и восприятие. 2003 г
+
+- [Объяснение параллакса движения](https://studme.org/182261/psihologiya/monokulyarnyy_parallaks_dvizheniya)

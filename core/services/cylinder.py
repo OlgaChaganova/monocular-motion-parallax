@@ -25,7 +25,7 @@ class Cylinder(object):
 
     def generate_points(self, points_cnt: int):
         """
-        Generate random points.
+        Generate random points in cylindrical coordinate system.
 
         Parameters
         ----------
@@ -35,7 +35,7 @@ class Cylinder(object):
         Returns
         -------
         np.array
-            Array with (x, y, z) coordinates placed at the row. Shape: (points_cnt, 3).
+            Array with (phi, z) coordinates placed at the row. Shape: (points_cnt, 2).
         """
         phis = np.random.uniform(low=0, high=(2 * np.pi), size=points_cnt)
         zs = np.random.uniform(low=self._z[0], high=self._z[1], size=points_cnt)
@@ -79,20 +79,29 @@ class Cylinder(object):
         assert direction in ['clockwise', 'counterclockwise'], \
             'Direction must be one of the following: clockwise, counterclockwise'
         if direction == 'clockwise':
-            self.points[:, 0] -= delta_phi * np.pi / 180
-        else:
             self.points[:, 0] += delta_phi * np.pi / 180
+        else:
+            self.points[:, 0] -= delta_phi * np.pi / 180
 
-    def project_2d(self) -> np.array:
+    def project_2d(self, dist_to_camera: float) -> np.array:
         """
         Project 3D points (x, y, z) to 2D (x, y).
+
+        Parameters
+        ----------
+        dist_to_camera : float
+            Distance to the camera.
 
         Returns
         -------
         np.array
-            Points in 2D-cartesian (x, y) coordinate system. Shape: [points_cnt, 2]
+            Projection of points in 2D-cartesian (x, y) coordinate system. Shape: [points_cnt, 2]
         """
         points = self.points
         points = self.cylindrical2cartesian(points)
         xs, ys, zs = points[:, 0], points[:, 1], points[:, 2]
-        return np.column_stack([xs, zs])
+        # xs_proj = dist_to_camera * ys /  xs
+        # ys_proj = dist_to_camera * zs / xs
+        xs_proj = -ys / dist_to_camera
+        ys_proj = (0.5 - zs) / (dist_to_camera - xs) + 0.5
+        return np.column_stack([xs_proj, ys_proj])
